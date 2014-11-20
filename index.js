@@ -6,14 +6,10 @@ module.exports = function(source) {
 
   var sourceFilename = loaderUtils.getRemainingRequest(this);
   var current = loaderUtils.getCurrentRequest(this);
+  var transformOptions = loaderUtils.parseQuery(this.query);
 
-  var query = loaderUtils.parseQuery(this.query);
-
-  var transform = reactTools.transformWithDetails(source, {
-    harmony: query.harmony,
-    es5: query.es5,
-    sourceMap: query.sourceMap
-  });
+  transformOptions.sourceMap = this.sourceMap;
+  var transform = reactTools.transformWithDetails(source, transformOptions);
   if (transform.sourceMap) {
     transform.sourceMap.sources = [sourceFilename];
     transform.sourceMap.file = current;
